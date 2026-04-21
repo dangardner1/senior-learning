@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Senior Learning App</title>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.3/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, #root { height: 100%; width: 100%; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; overflow: hidden; }
+
+    /* Text size classes */
+    .text-A  { --body: 18px; --label: 15px; --heading: 26px; --subheading: 20px; --micro: 14px; }
+    .text-AA { --body: 20px; --label: 16px; --heading: 30px; --subheading: 22px; --micro: 15px; }
+    .text-AAA{ --body: 22px; --label: 17px; --heading: 34px; --subheading: 24px; --micro: 16px; }
+
+    /* Color themes */
+    .theme-light {
+      --bg: #F9F7F4;
+      --surface: #FFFFFF;
+      --border: #E0DBD4;
+      --text: #1A1A1A;
+      --text-secondary: #555555;
+      --accent: #2563EB;
+      --accent-light: #EFF6FF;
+      --success: #16A34A;
+      --nav-bg: #FFFFFF;
+      --nav-border: #E0DBD4;
+      --tile-tech: #1D4ED8;
+      --tile-know: #7C3AED;
+      --tile-ai: #0F766E;
+      --tile-saved: #C2410C;
+      --positive: #14532D;
+      --positive-bg: #DCFCE7;
+      --card-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .theme-dark {
+      --bg: #000000;
+      --surface: #111111;
+      --border: #444444;
+      --text: #FFFFFF;
+      --text-secondary: #DDDDDD;
+      --accent: #FACC15;
+      --accent-light: #1A1600;
+      --success: #4ADE80;
+      --nav-bg: #111111;
+      --nav-border: #444444;
+      --tile-tech: #1E40AF;
+      --tile-know: #5B21B6;
+      --tile-ai: #115E59;
+      --tile-saved: #9A3412;
+      --positive: #FACC15;
+      --positive-bg: #1A1600;
+      --card-shadow: 0 2px 8px rgba(255,255,255,0.06);
+    }
+
+    #root { background: var(--bg); color: var(--text); font-size: var(--body); }
+
+    .app-container {
+      max-width: 480px;
+      margin: 0 auto;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      position: relative;
+    }
+
+    /* Top nav */
+    .top-nav {
+      background: var(--nav-bg);
+      border-bottom: 1px solid var(--nav-border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      min-height: 60px;
+      z-index: 10;
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn {
+      min-width: 44px;
+      min-height: 44px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: var(--text);
+      padding: 4px;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover { background: var(--accent-light); }
+    .nav-btn.active { background: var(--accent-light); color: var(--accent); }
+    .text-size-btn {
+      font-weight: 700;
+      font-size: var(--label);
+      letter-spacing: -0.5px;
+      min-width: 40px;
+      min-height: 44px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      padding: 4px 8px;
+      transition: all 0.15s;
+    }
+    .text-size-btn.selected {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+    .breadcrumb {
+      font-size: var(--micro);
+      color: var(--text-secondary);
+      text-align: center;
+      flex: 1;
+      padding: 0 8px;
+      line-height: 1.3;
+    }
+    .breadcrumb strong { color: var(--text); }
+
+    /* Scroll content area */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px 100px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--nav-bg);
+      border-top: 1px solid var(--nav-border);
+      padding: 10px 16px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      z-index: 10;
+    }
+    .home-btn {
+      min-height: 56px;
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 14px;
+      font-size: var(--label);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+      box-shadow: var(--card-shadow);
+    }
+    .home-btn:hover { border-color: var(--accent); }
+    .home-btn:disabled { opacity: 0.4; cursor: default; }
+
+    /* Primary action button */
+    .btn-primary {
+      width: 100%;
+      min-height: 60px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      font-size: var(--body);
+      font-weight: 700;
+      cursor: pointer;
+      padding: 14px 20px;
+      transition: opacity 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary {
+      width: 100%;
+      min-height: 56px;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      font-size: var(--body);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 12px 20px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-secondary:hover { border-color: var(--accent); }
+
+    /* Topic tiles */
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 8px;
+    }
+    .tile {
+      border-radius: 18px;
+      padding: 22px 16px;
+      cursor: pointer;
+      color: #fff;
+      min-height: 130px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      border: none;
+      text-align: left;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .tile:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.22); }
+    .tile:active { transform: translateY(0); }
+    .tile.full-width { grid-column: 1 / -1; min-height: 90px; flex-direction: row; align-items: center; }
+    .tile-icon { font-size: 32px; margin-bottom: 8px; }
+    .tile.full-width .tile-icon { margin-bottom: 0; margin-right: 16px; }
+    .tile-title { font-size: var(--subheading); font-weight: 700; line-height: 1.2; }
+    .tile-desc { font-size: var(--micro); opacity: 0.88; margin-top: 4px; }
+
+    /* Lesson cards */
+    .lesson-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.15s;
+      min-height: 80px;
+      width: 100%;
+      text-align: left;
+      color: var(--text);
+    }
+    .lesson-card:hover { border-color: var(--accent); box-shadow: 0 4px 14px rgba(0,0,0,0.12); }
+    .lesson-card-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+    .lesson-card-body { flex: 1; }
+    .lesson-card-title { font-size: var(--subheading); font-weight: 700; margin-bottom: 4px; }
+    .lesson-card-desc { font-size: var(--micro); color: var(--text-secondary); margin-bottom: 6px; line-height: 1.5; }
+    .lesson-card-meta { font-size: var(--micro); color: var(--text-secondary); display: flex; gap: 12px; align-items: center; }
+    .badge { background: var(--accent-light); color: var(--accent); border-radius: 20px; padding: 2px 10px; font-size: var(--micro); font-weight: 600; }
+
+    /* Lesson viewer */
+    .lesson-progress { margin-bottom: 20px; }
+    .step-label { font-size: var(--label); color: var(--text-secondary); margin-bottom: 8px; font-weight: 600; }
+    .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.4s ease; }
+    .lesson-screen-title { font-size: var(--heading); font-weight: 700; margin-bottom: 16px; line-height: 1.25; color: var(--text); }
+    .lesson-screen-body { font-size: var(--body); line-height: 1.7; color: var(--text); }
+    .lesson-screen-body p { margin-bottom: 14px; }
+    .lesson-screen-body strong { color: var(--text); }
+    .step-callout {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 12px 12px 0;
+      padding: 14px 16px;
+      margin: 16px 0;
+      font-size: var(--body);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .micro-feedback {
+      background: var(--positive-bg);
+      color: var(--positive);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: var(--body);
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .lesson-nav-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn-back {
+      min-height: 56px;
+      min-width: 56px;
+      background: var(--surface);
+      color: var(--text);
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .btn-back:hover { border-color: var(--accent); }
+    .btn-back:disabled { opacity: 0.3; cursor: default; }
+
+    /* Completion screen */
+    .completion-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+    }
+    .completion-icon { font-size: 64px; margin-bottom: 16px; }
+    .completion-title { font-size: var(--heading); font-weight: 700; margin-bottom: 12px; line-height: 1.25; }
+    .completion-body { font-size: var(--body); color: var(--text-secondary); line-height: 1.7; margin-bottom: 24px; }
+    .summary-list { text-align: left; margin: 20px 0; }
+    .summary-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: var(--body); line-height: 1.5; }
+    .summary-check { color: var(--success); font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Help overlay */
+    .overlay-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 50;
+      display: flex;
+      align-items: flex-end;
+    }
+    .overlay-sheet {
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      padding: 28px 24px 36px;
+      width: 100%;
+      max-height: 65%;
+      overflow-y: auto;
+    }
+    .overlay-title { font-size: var(--subheading); font-weight: 700; margin-bottom: 12px; }
+    .overlay-body { font-size: var(--body); color: var(--text-secondary); line-height: 1.7; }
+    .overlay-close { width: 100%; margin-top: 20px; }
+
+    /* Resume banner */
+    .resume-banner {
+      background: var(--accent-light);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    .resume-title { font-size: var(--subheading); font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+    .resume-desc { font-size: var(--body); color: var(--text); margin-bottom: 14px; line-height: 1.5; }
+    .resume-btns { display: flex; gap: 10px; }
+    .resume-btns button { flex: 1; min-height: 52px; border-radius: 12px; font-size: var(--label); font-weight: 700; cursor: pointer; border: 2px solid var(--accent); transition: all 0.15s; }
+    .resume-yes { background: var(--accent); color: #fff; }
+    .resume-no { background: var(--surface); color: var(--accent); }
+
+    /* Bookmark button */
+    .bookmark-btn {
+      min-height: 44px;
+      min-width: 44px;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .bookmark-btn:hover { background: var(--accent-light); }
+
+    /* Audio button */
+    .audio-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .audio-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: var(--micro);
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+      min-height: 44px;
+    }
+    .audio-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .audio-btn.playing { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+    /* Where am I */
+    .where-am-i {
+      font-size: var(--micro);
+      color: var(--text-secondary);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 12px;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    /* Page title */
+    .page-title {
+      font-size: var(--heading);
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .page-subtitle {
+      font-size: var(--body);
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Saved badge */
+    .saved-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--micro);
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    /* Bullet summary */
+    .bullet-list { list-style: none; padding: 0; }
+    .bullet-list li { padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: flex-start; font-size: var(--body); line-height: 1.5; }
+    .bullet-list li:last-child { border-bottom: none; }
+
+    /* Speed control */
+    .speed-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+    .speed-btn { min-height: 36px; padding: 4px 12px; border: 2px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text-secondary); font-size: var(--micro); font-weight: 700; cursor: pointer; transition: all 0.15s; }
+    .speed-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+    /* Responsive for desktop preview */
+    @media (min-width: 520px) {
+      .app-container { border-left: 1px solid var(--border); border-right: 1px solid var(--border); box-shadow: 0 0 40px rgba(0,0,0,0.12); }
+    }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ─── CONTENT DATA ─────────────────────────────────────────────── */
+const TOPICS = [
+  { id: "tech",    label: "Technology",        icon: "💻", color: "var(--tile-tech)",  desc: "Smartphones, email, video calls, and online safety" },
+  { id: "know",    label: "General Knowledge", icon: "🌎", color: "var(--tile-know)",  desc: "History, science, arts, and current events" },
+  { id: "ai",      label: "AI & You",          icon: "🤖", color: "var(--tile-ai)",    desc: "What AI is, how to use it safely, voice assistants" },
+];
+
+const LESSONS = [
+  {
+    id: "video-call",
+    topic: "tech",
+    icon: "📱",
+    title: "How to Make a Video Call",
+    tileDesc: "Learn to see family and friends face to face — no matter how far away they are.",
+    time: "About 12 minutes",
+    screens: [
+      {
+        title: "See Family Face to Face",
+        body: `<p>Today you will learn how to make a video call.</p><p>A <strong>video call</strong> lets you see and hear the person you are talking to — even if they live far away. Many people use video calls to stay close with family.</p>`,
+        type: "hook"
+      },
+      {
+        title: "What You Need",
+        body: `<p>To make a video call, you need three things:</p>`,
+        callout: "1. A phone, tablet, or computer with a front camera.\n2. A Wi-Fi or internet connection.\n3. A free video call app — like FaceTime, Zoom, or Google Meet.",
+        type: "content"
+      },
+      {
+        title: "Finding the App",
+        body: `<p>Look for the video call app on your screen. It is a small picture, called an <strong>icon</strong>.</p><p>FaceTime is green with a white camera. Zoom is blue with a white video camera. Google Meet is green, blue, and red.</p>`,
+        callout: "Step 1: Find the app icon on your screen.\nStep 2: Tap it once with your finger.",
+        type: "content"
+      },
+      {
+        title: "Finding a Contact",
+        body: `<p>Once the app opens, you need to find the person you want to call.</p><p>Tap the <strong>search box</strong> — it is usually at the top of the screen. Type the first few letters of their name.</p>`,
+        callout: "Step 3: Tap the search box.\nStep 4: Type the name of the person you want to call.\nStep 5: Tap their name when you see it.",
+        type: "content"
+      },
+      {
+        title: "Starting the Call",
+        body: `<p>Now you are ready to call. You will see a button with a camera or phone icon.</p><p>Tap the <strong>video camera icon</strong> to start a video call. The app will connect to the other person.</p>`,
+        callout: "Step 6: Tap the video camera button.\nStep 7: Wait a few seconds while it connects.",
+        type: "content"
+      },
+      {
+        title: "During the Call",
+        body: `<p>When the other person answers, you will see their face on your screen. They will see yours too.</p><p>Hold the phone or tablet so the camera faces you. Good lighting helps — try to face a window.</p><p>To end the call, tap the <strong>red button</strong> with a phone icon.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: ["You learned that a video call lets you see someone while you talk.", "You learned that you need an app, a camera, and Wi-Fi.", "You learned how to find a contact and start a call."],
+        type: "summary"
+      },
+      {
+        title: "Great Job!",
+        body: `<p>You just learned how to make a video call. That is a wonderful skill to have.</p><p><strong>What to try next:</strong> Ask a family member if they would like to try a video call with you this week.</p>`,
+        type: "end"
+      }
+    ]
+  },
+  {
+    id: "what-is-ai",
+    topic: "ai",
+    icon: "🤖",
+    title: "What Is AI?",
+    tileDesc: "Understand what Artificial Intelligence is — in plain, simple language.",
+    time: "About 10 minutes",
+    screens: [
+      {
+        title: "What Is AI?",
+        body: `<p>Today you will learn what AI means.</p><p><strong>AI</strong> stands for Artificial Intelligence. It is a type of computer program. Understanding AI helps you use new tools safely and confidently.</p>`,
+        type: "hook"
+      },
+      {
+        title: "AI Is a Tool",
+        body: `<p>AI is a <strong>tool</strong> — just like a calculator or a search engine.</p><p>It is not a person. It does not have feelings. It does not think the way you do. It is a program that follows patterns in information to give you answers.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Already Use AI",
+        body: `<p>You have probably used AI without knowing it.</p><p>When your phone fixes a spelling mistake — that is AI. When a website suggests a movie you might like — that is AI. When your email moves junk mail to a spam folder — that is AI.</p>`,
+        callout: "AI is already part of everyday life. It is more familiar than it sounds.",
+        type: "content"
+      },
+      {
+        title: "What AI Can Do",
+        body: `<p>AI tools can answer questions, write text, translate languages, and recognize photos.</p><p>You can ask an AI tool: "What is a good recipe for chicken soup?" or "How do I renew my driver's license?" It will give you an answer right away.</p>`,
+        type: "content"
+      },
+      {
+        title: "AI Can Be Wrong",
+        body: `<p>Here is something important to know: <strong>AI tools sometimes make mistakes.</strong></p><p>They can give a wrong answer with great confidence. This is why you should always check important information — like medical or financial advice — with a real doctor, pharmacist, or trusted website.</p>`,
+        callout: "When it matters most, always double-check with a real expert.",
+        type: "content"
+      },
+      {
+        title: "You Are Always in Charge",
+        body: `<p>AI tools work for <em>you</em>. You decide when to use them and when not to.</p><p>You can ask follow-up questions. You can ignore an answer. You can close the app at any time. AI is a helpful assistant — nothing more.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: ["You learned that AI stands for Artificial Intelligence — a type of computer program.", "You learned that AI tools can make mistakes, so important facts need to be checked.", "You learned that you are always in charge when using AI tools."],
+        type: "summary"
+      },
+      {
+        title: "Well Done!",
+        body: `<p>You just learned the basics of AI. That puts you ahead of many people.</p><p><strong>Remember:</strong> AI is a tool. You are in charge.</p><p><strong>What to try next:</strong> Take the lesson "Talking to a Voice Assistant" to try AI in a safe, easy way.</p>`,
+        type: "end"
+      }
+    ]
+  },
+  {
+    id: "online-scams",
+    topic: "tech",
+    icon: "🛡️",
+    title: "Spotting Online Scams",
+    tileDesc: "Learn how to recognize and avoid common scams — and what to do if you see one.",
+    time: "About 11 minutes",
+    screens: [
+      {
+        title: "Protect Yourself Online",
+        body: `<p>Today you will learn how to recognize online scams.</p><p>A <strong>scam</strong> is when someone tries to trick you into giving them money or personal information. Knowing what to look for keeps you safe.</p>`,
+        type: "hook"
+      },
+      {
+        title: "What Is a Scam?",
+        body: `<p>Scammers send fake messages by email, text, or phone. They want your money, your passwords, or your personal information like your Social Security number.</p><p>Scammers often pretend to be companies or people you trust — like banks, the government, or even family members.</p>`,
+        type: "content"
+      },
+      {
+        title: "Warning Sign: Urgency",
+        body: `<p>Scam messages almost always use <strong>urgent language</strong>. They want you to act fast before you have time to think.</p>`,
+        callout: "Watch out for phrases like:\n• \"Act now or your account will be closed!\"\n• \"You must respond in 24 hours.\"\n• \"Immediate action required.\"",
+        type: "content"
+      },
+      {
+        title: "Warning Sign: Asking for Information",
+        body: `<p>A real bank, government office, or company will <strong>never</strong> ask for your password, Social Security number, or credit card number by email or text.</p><p>If a message asks for this information, it is almost certainly a scam.</p>`,
+        callout: "Your STOP list — never share:\n• Social Security number\n• Bank account or card numbers\n• Passwords or PINs\n• Medicare or insurance numbers",
+        type: "content"
+      },
+      {
+        title: "AI-Powered Scam Calls",
+        body: `<p>Scammers now use AI to copy the voice of a family member. You might get a call that sounds exactly like your son or daughter asking for money.</p><p>If you get a surprising call asking for money, <strong>hang up and call that person back directly</strong> using their real phone number.</p>`,
+        callout: "3-step check:\n1. Hang up.\n2. Find the real number yourself.\n3. Call back to verify.",
+        type: "content"
+      },
+      {
+        title: "What to Do If You See a Scam",
+        body: `<p>If you think a message is a scam, here is what to do:</p><p><strong>Do not click any links.</strong> Do not reply. Do not call a number in the message.</p><p>Delete the message, or ask a trusted friend or family member to look at it with you. You can also report it to the FTC at reportfraud.ftc.gov.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: ["You learned that scammers use urgency and fake identities to trick people.", "You learned the STOP list — personal information you should never share.", "You learned that AI can fake voices — always call back on a known number."],
+        type: "summary"
+      },
+      {
+        title: "You Are Better Protected Now",
+        body: `<p>You just learned how to spot and avoid online scams. That knowledge protects you and the people you care about.</p><p><strong>What to try next:</strong> Share what you learned with a friend or family member.</p>`,
+        type: "end"
+      }
+    ]
+  },
+  {
+    id: "voice-assistant",
+    topic: "ai",
+    icon: "🎙️",
+    title: "Talking to a Voice Assistant",
+    tileDesc: "Learn how to use Siri, Google Assistant, or Alexa to get help with everyday tasks.",
+    time: "About 10 minutes",
+    screens: [
+      { title: "Ask Questions Out Loud", body: `<p>Today you will learn how to use a <strong>voice assistant</strong>.</p><p>A voice assistant is an AI tool that listens to your voice and answers your questions. You can use it without typing a single letter.</p>`, type: "hook" },
+      { title: "The Three Main Assistants", body: `<p>There are three popular voice assistants:</p>`, callout: "• Siri — on Apple phones and tablets (say: \"Hey Siri\")\n• Google Assistant — on Android phones (say: \"Hey Google\")\n• Alexa — on Amazon Echo devices (say: \"Alexa\")", type: "content" },
+      { title: "How to Wake It Up", body: `<p>To use a voice assistant, say its <strong>wake word</strong> — this is the word that turns it on.</p><p>For Siri, say: <em>"Hey Siri."</em> Wait for a sound or light. Then ask your question in a normal voice.</p>`, callout: "Step 1: Say \"Hey Siri\" (or Hey Google, or Alexa).\nStep 2: Wait for a chime or light.\nStep 3: Ask your question out loud.", type: "content" },
+      { title: "What You Can Ask", body: `<p>You can ask a voice assistant almost anything.</p><p>Try: <em>"What is the weather today?"</em> or <em>"Set a timer for 10 minutes."</em> or <em>"Call my daughter."</em></p><p>Speak naturally — you do not need special words.</p>`, type: "content" },
+      { title: "If It Does Not Understand", body: `<p>Sometimes the assistant will not understand you. That is okay.</p><p>Try speaking a little more slowly and clearly. Or try asking the question in a different way. You can always try again — it will not get frustrated.</p>`, type: "content" },
+      { title: "Remember: It Is a Tool", body: `<p>Voice assistants are useful, but they are not perfect. They sometimes give wrong answers.</p><p>For important questions — about health, money, or legal matters — always check with a real doctor, financial advisor, or lawyer.</p><p><strong>Remember: AI is a tool. You are in charge.</strong></p>`, type: "content" },
+      { title: "You Learned", body: ``, bullets: ["You learned that a voice assistant lets you ask questions out loud — no typing needed.", "You learned the three main assistants: Siri, Google Assistant, and Alexa.", "You learned that for important matters, you should always check with a real expert."], type: "summary" },
+      { title: "Excellent Work!", body: `<p>You just learned how to use a voice assistant. Give it a try — ask it what the weather is like today.</p><p><strong>Remember:</strong> AI is a tool. You are in charge.</p>`, type: "end" }
+    ]
+  },
+  {
+    id: "sending-email",
+    topic: "tech",
+    icon: "✉️",
+    title: "How to Send an Email",
+    tileDesc: "Send a message to anyone in the world — quickly and for free.",
+    time: "About 12 minutes",
+    screens: [
+      { title: "Send a Message to Anyone", body: `<p>Today you will learn how to send an email.</p><p>An <strong>email</strong> is a free digital message you can send to anyone with an email address — across town or across the world. It arrives in seconds.</p>`, type: "hook" },
+      { title: "What Is an Email Address?", body: `<p>An <strong>email address</strong> is a unique name that identifies where a message goes — like a mailing address, but for digital messages.</p><p>It always has an <strong>@</strong> symbol in the middle. For example: <em>mary.jones@gmail.com</em></p>`, type: "content" },
+      { title: "Opening Your Email App", body: `<p>To send an email, open your email app. Common apps are <strong>Gmail</strong>, <strong>Mail</strong> (Apple), or <strong>Outlook</strong>.</p>`, callout: "Step 1: Find your email app icon and tap it.\nStep 2: Look for a button that says \"Compose\" or \"New\" — it usually has a pencil icon.\nStep 3: Tap that button.", type: "content" },
+      { title: "Filling in the Address", body: `<p>You will see a form with boxes to fill in.</p>`, callout: "\"To:\" — type the email address of the person you are writing to.\n\"Subject:\" — write a short title for your message (like \"Hello from Mary\").\nThe big empty box below — this is where you write your message.", type: "content" },
+      { title: "Writing Your Message", body: `<p>Tap inside the big box and start typing your message. Write whatever you would like to say.</p><p>Keep it simple. Even one or two sentences is a perfectly good email.</p><p>When you are done, look for a <strong>Send</strong> button — it often looks like a paper airplane. Tap it once.</p>`, type: "content" },
+      { title: "Your Message Is On Its Way", body: `<p>After you tap Send, the email goes right away. The other person will see it when they check their email.</p><p>Most people check email at least once a day. You may hear back within a few hours or a day or two.</p>`, type: "content" },
+      { title: "You Learned", body: ``, bullets: ["You learned that an email is a free digital message you can send to anyone.", "You learned that every email address has an @ symbol.", "You learned how to write and send an email in a few easy steps."], type: "summary" },
+      { title: "You Did It!", body: `<p>You just learned how to send an email. That opens up a whole new way to stay in touch.</p><p><strong>What to try next:</strong> Send a short email to a friend or family member today — even just to say hello.</p>`, type: "end" }
+    ]
+  },
+  {
+    id: "history-moon",
+    topic: "know",
+    icon: "🌙",
+    title: "The First Moon Landing",
+    tileDesc: "Learn about one of the most remarkable moments in human history — July 1969.",
+    time: "About 10 minutes",
+    screens: [
+      { title: "One Small Step", body: `<p>Today you will learn about the first time humans walked on the moon.</p><p>It happened on July 20, 1969. It was one of the most watched events in television history — and one of the greatest achievements ever.</p>`, type: "hook" },
+      { title: "The Space Race", body: `<p>In the 1950s and 1960s, the United States and the Soviet Union were competing to explore space. This was called the <strong>Space Race</strong>.</p><p>In 1961, President John F. Kennedy challenged the country: land a person on the moon before the end of the decade.</p>`, type: "content" },
+      { title: "Apollo 11", body: `<p>The mission was called <strong>Apollo 11</strong>. Three astronauts made the journey:</p>`, callout: "• Neil Armstrong — Mission Commander\n• Buzz Aldrin — Lunar Module Pilot\n• Michael Collins — Command Module Pilot (stayed in orbit)", type: "content" },
+      { title: "Landing on the Moon", body: `<p>On July 20, the lunar module — named <em>Eagle</em> — separated from the main spacecraft and descended toward the moon's surface.</p><p>Neil Armstrong radioed back: <em>"The Eagle has landed."</em> People around the world held their breath.</p>`, type: "content" },
+      { title: "The First Steps", body: `<p>Hours later, Armstrong stepped onto the moon's surface. Over 600 million people watched on television.</p><p>He said: <em>"That's one small step for man, one giant leap for mankind."</em></p><p>Buzz Aldrin joined him shortly after. Together they walked on the moon for more than two hours.</p>`, type: "content" },
+      { title: "What They Left Behind", body: `<p>The astronauts left behind a U.S. flag, a plaque, and scientific instruments.</p><p>They also brought back 47 pounds of moon rocks for scientists to study.</p><p>The mission proved that humans could travel to and safely return from another world.</p>`, type: "content" },
+      { title: "You Learned", body: ``, bullets: ["You learned that Apollo 11 landed on the moon on July 20, 1969.", "You learned the names of the three astronauts: Armstrong, Aldrin, and Collins.", "You learned that over 600 million people watched the first moon walk on television."], type: "summary" },
+      { title: "Wonderful!", body: `<p>You just learned about one of humanity's greatest achievements.</p><p><strong>What to try next:</strong> Try the lesson "How the Internet Was Invented" — another amazing piece of modern history.</p>`, type: "end" }
+    ]
+  },
+  {
+    id: "internet-invented",
+    topic: "know",
+    icon: "🌐",
+    title: "How the Internet Was Invented",
+    tileDesc: "A friendly look at how computers learned to talk to each other — and how the web changed daily life.",
+    time: "About 11 minutes",
+    screens: [
+      {
+        title: "From a Small Network to a World Connection",
+        body: `<p>Today you will learn how the <strong>internet</strong> began — not with magic, but with careful work by scientists and engineers.</p><p>The internet is the worldwide system that connects computers so they can share information. It helps us read news, send email, see photos, and make video calls.</p>`,
+        type: "hook"
+      },
+      {
+        title: "Computers That Needed to Share",
+        body: `<p>In the 1960s, a few universities and government labs had large, expensive computers. Researchers wanted those machines to <strong>share data</strong> without mailing tapes or disks across the country.</p><p>The goal was simple to say and hard to do: make different computers understand a common set of rules for sending messages.</p>`,
+        type: "content"
+      },
+      {
+        title: "ARPANET: An Early Experiment",
+        body: `<p>In the late 1960s, a U.S. research project called <strong>ARPANET</strong> sent the first messages between distant computers.</p><p>At first only a handful of sites were connected. If one line failed, the network could try another path — that idea of <em>many routes</em> became a backbone of today's internet.</p>`,
+        callout: "Think of it like city streets: if one road is closed, you can often take another and still arrive.",
+        type: "content"
+      },
+      {
+        title: "A Common Language for Machines",
+        body: `<p>As more schools and labs joined, engineers wrote <strong>standards</strong> — shared rules so different brands of computers could talk.</p><p>Those standards are a bit like agreeing that a red light always means stop. When everyone follows the same rules, traffic flows safely.</p>`,
+        type: "content"
+      },
+      {
+        title: "The World Wide Web",
+        body: `<p>In 1989, a scientist named <strong>Tim Berners-Lee</strong> proposed a way to link documents stored on many computers. His idea became the <strong>World Wide Web</strong>.</p><p>The web sits on top of the internet. The internet carries the data; the web organizes it into pages you can visit with a browser.</p>`,
+        type: "content"
+      },
+      {
+        title: "Opening the Web to Everyone",
+        body: `<p>Through the 1990s, the web spread to homes and small businesses. Email became common. Search engines helped people find information. Later came social media, maps on phones, and video streaming.</p><p>None of it appeared overnight. Each step built on work that came before — like adding rooms to a house over many years.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: [
+          "You learned that early networks like ARPANET helped distant computers share data in the 1960s and 1970s.",
+          "You learned that shared rules (standards) let different kinds of computers work together.",
+          "You learned that the World Wide Web is a way to link documents — built on top of the internet."
+        ],
+        type: "summary"
+      },
+      {
+        title: "Well Done!",
+        body: `<p>You just learned how the internet and the web took shape. Understanding the story helps make today's tools feel a little less mysterious.</p><p><strong>What to try next:</strong> Explore a Technology lesson like "How to Send an Email" to see how these ideas show up in everyday tasks.</p>`,
+        type: "end"
+      }
+    ]
+  }
+];
+
+/* ─── LOCAL STORAGE ─────────────────────────────────────────── */
+const STORAGE = {
+  saved: "senior-learning.saved",
+  prefs: "senior-learning.prefs",
+  progress: "senior-learning.progress",
+};
+
+function loadJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw == null) return fallback;
+    return JSON.parse(raw);
+  } catch {
+    return fallback;
+  }
+}
+
+function saveJSON(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn("Could not save settings", e);
+  }
+}
+
+function clampLessonStep(lessonId, step) {
+  const lesson = LESSONS.find(l => l.id === lessonId);
+  if (!lesson || !lesson.screens.length) return 0;
+  const max = lesson.screens.length - 1;
+  return Math.max(0, Math.min(Number(step) || 0, max));
+}
+
+const HELP_TEXT = {
+  home: { title: "You are on the Home screen.", body: "Tap any large tile to explore lessons in that topic. Tap 'My Saved Lessons' to see lessons you have bookmarked." },
+  topic: { title: "You are on a Topic screen.", body: "You can see all the lessons in this topic. Tap any lesson card to start that lesson. Each card shows how long the lesson takes." },
+  lesson: { title: "You are inside a lesson.", body: "Read the screen, then tap 'Next Step' to continue. Tap the back arrow to go to a previous step. Tap the speaker icon to hear the text read aloud." },
+  completion: { title: "You finished a lesson!", body: "Great work! Tap 'Go Home' to return to the home screen and choose another lesson." },
+  saved: { title: "You are on your Saved Lessons screen.", body: "These are lessons you bookmarked. Tap any lesson to take it. Tap the bookmark icon again inside a lesson to remove it." }
+};
+
+/* ─── COMPONENTS ─────────────────────────────────────────────── */
+
+function TopNav({ screen, lessonTitle, topicLabel, step, totalSteps, onBack, textSize, setTextSize, contrast, setContrast, onHelp, canGoBack }) {
+  const breadcrumb = () => {
+    if (screen === "home") return <span><strong>Home</strong></span>;
+    if (screen === "topic") return <span>Home › <strong>{topicLabel}</strong></span>;
+    if (screen === "lesson") return <span>{topicLabel} › <strong>{lessonTitle}</strong>{step != null ? ` › Step ${step} of ${totalSteps}` : ''}</span>;
+    if (screen === "completion") return <span>{topicLabel} › {lessonTitle} › <strong>Complete ✓</strong></span>;
+    if (screen === "saved") return <span>Home › <strong>My Saved Lessons</strong></span>;
+    return null;
+  };
+
+  return (
+    <div className="top-nav">
+      <div className="nav-left">
+        <button className={`nav-btn`} onClick={onBack} disabled={!canGoBack} aria-label="Go back" style={{ opacity: canGoBack ? 1 : 0.3 }}>◀</button>
+      </div>
+      <div className="breadcrumb">{breadcrumb()}</div>
+      <div className="nav-right">
+        {["A","AA","AAA"].map(s => (
+          <button key={s} className={`text-size-btn${textSize===s?" selected":""}`} onClick={() => setTextSize(s)} aria-label={`Text size ${s}`}>{s}</button>
+        ))}
+        <button className={`nav-btn${contrast?"active":""}`} onClick={() => setContrast(c=>!c)} aria-label="Toggle high contrast" title="High contrast">
+          {contrast ? "☀️" : "🌙"}
+        </button>
+        <button className="nav-btn" onClick={onHelp} aria-label="Help">❓</button>
+      </div>
+    </div>
+  );
+}
+
+function BottomNav({ onHome, onSaved, isHome }) {
+  return (
+    <div className="bottom-nav" style={{ justifyContent: "space-between" }}>
+      <button className="home-btn" onClick={onHome} disabled={isHome} aria-label="Go home">
+        🏠 Home
+      </button>
+      <button className="home-btn" onClick={onSaved} aria-label="My saved lessons">
+        🔖 Saved
+      </button>
+    </div>
+  );
+}
+
+function HomeScreen({ savedLessons, inProgressLesson, onResume, onDismissResume }) {
+  return (
+    <div>
+      <div className="page-title">Welcome Back 👋</div>
+      <div className="page-subtitle">What would you like to learn today?</div>
+
+      {inProgressLesson && (
+        <div className="resume-banner">
+          <div className="resume-title">Welcome back!</div>
+          <div className="resume-desc">Want to continue where you left off? <strong>{inProgressLesson.title}</strong></div>
+          <div className="resume-btns">
+            <button className="resume-yes" onClick={onResume}>Continue Lesson</button>
+            <button className="resume-no" onClick={onDismissResume}>Start Fresh</button>
+          </div>
+        </div>
+      )}
+
+      <div className="tiles-grid">
+        {TOPICS.map(t => (
+          <TopicTile key={t.id} topic={t} />
+        ))}
+        <SavedTile count={savedLessons.length} />
+      </div>
+    </div>
+  );
+}
+
+function TopicTile({ topic }) {
+  const [appCtx] = [React.useContext(AppContext)];
+  return (
+    <button className="tile" style={{ background: topic.color }} onClick={() => appCtx.navigate("topic", { topicId: topic.id })} aria-label={`${topic.label} lessons`}>
+      <div className="tile-icon">{topic.icon}</div>
+      <div>
+        <div className="tile-title">{topic.label}</div>
+        <div className="tile-desc">{topic.desc}</div>
+      </div>
+    </button>
+  );
+}
+
+function SavedTile({ count }) {
+  const [appCtx] = [React.useContext(AppContext)];
+  return (
+    <button className="tile full-width" style={{ background: "var(--tile-saved)" }} onClick={() => appCtx.navigate("saved")} aria-label="My saved lessons">
+      <div className="tile-icon">🔖</div>
+      <div>
+        <div className="tile-title">My Saved Lessons</div>
+        <div className="tile-desc">{count === 0 ? "Tap the bookmark icon in any lesson to save it here." : `${count} lesson${count===1?"":"s"} saved`}</div>
+      </div>
+    </button>
+  );
+}
+
+function TopicScreen({ topicId, savedLessons }) {
+  const topic = TOPICS.find(t => t.id === topicId);
+  const lessons = LESSONS.filter(l => l.topic === topicId);
+  const appCtx = React.useContext(AppContext);
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
+        <span style={{ fontSize: 48 }}>{topic.icon}</span>
+        <div>
+          <div className="page-title" style={{ marginBottom: 2 }}>{topic.label}</div>
+          <div style={{ fontSize: "var(--body)", color: "var(--text-secondary)" }}>{lessons.length} lessons available</div>
+        </div>
+      </div>
+      {lessons.map(l => (
+        <LessonCard key={l.id} lesson={l} isSaved={savedLessons.includes(l.id)} onStart={() => appCtx.navigate("lesson", { lessonId: l.id })} />
+      ))}
+    </div>
+  );
+}
+
+function LessonCard({ lesson, isSaved, onStart }) {
+  return (
+    <button className="lesson-card" onClick={onStart} aria-label={`Start lesson: ${lesson.title}`}>
+      <div className="lesson-card-icon">{lesson.icon}</div>
+      <div className="lesson-card-body">
+        <div className="lesson-card-title">{lesson.title}</div>
+        <div className="lesson-card-desc">{lesson.tileDesc}</div>
+        <div className="lesson-card-meta">
+          <span>🕐 {lesson.time}</span>
+          {isSaved && <span className="saved-indicator">🔖 Saved</span>}
+        </div>
+      </div>
+      <div style={{ fontSize: 22, color: "var(--text-secondary)", flexShrink: 0 }}>›</div>
+    </button>
+  );
+}
+
+function SavedScreen({ savedLessons }) {
+  const appCtx = React.useContext(AppContext);
+  const lessons = LESSONS.filter(l => savedLessons.includes(l.id));
+  return (
+    <div>
+      <div className="page-title">My Saved Lessons</div>
+      <div className="page-subtitle">{lessons.length === 0 ? "You have not saved any lessons yet." : `${lessons.length} lesson${lessons.length===1?"":"s"} saved`}</div>
+      {lessons.length === 0 && (
+        <div style={{ textAlign: "center", padding: "40px 0", color: "var(--text-secondary)", fontSize: "var(--body)" }}>
+          <div style={{ fontSize: 48, marginBottom: 16 }}>🔖</div>
+          <p>Tap the bookmark icon inside any lesson to save it here for later.</p>
+        </div>
+      )}
+      {lessons.map(l => (
+        <LessonCard key={l.id} lesson={l} isSaved={true} onStart={() => appCtx.navigate("lesson", { lessonId: l.id })} />
+      ))}
+    </div>
+  );
+}
+
+function LessonScreen({ lessonId, startStep, savedLessons, onSave, onComplete, onStepChange }) {
+  const lesson = LESSONS.find(l => l.id === lessonId);
+  const [step, setStep] = useState(() => clampLessonStep(lessonId, typeof startStep === "number" ? startStep : 0));
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [speed, setSpeed] = useState("1x");
+  const contentRef = useRef(null);
+  const isSaved = savedLessons.includes(lessonId);
+  const screen = lesson.screens[step];
+  const total = lesson.screens.length;
+  const isLast = step === total - 1;
+
+  useEffect(() => {
+    onStepChange && onStepChange(lessonId, step);
+  }, [lessonId, step, onStepChange]);
+
+  const goNext = () => {
+    if (isLast) { onComplete(lessonId); return; }
+    setShowFeedback(true);
+    setTimeout(() => { setShowFeedback(false); setStep(s => s + 1); }, 900);
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  };
+
+  const goBack = () => { if (step > 0) { setStep(s => s - 1); setShowFeedback(false); } };
+
+  const toggleAudio = () => {
+    if (isPlaying) {
+      window.speechSynthesis && window.speechSynthesis.cancel();
+      setIsPlaying(false);
+    } else {
+      const text = [screen.title, screen.body?.replace(/<[^>]*>/g, " "), screen.callout, screen.bullets?.join(". ")].filter(Boolean).join(". ");
+      if (window.speechSynthesis) {
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = speed === "0.75x" ? 0.75 : speed === "1.25x" ? 1.25 : 0.9;
+        utter.onend = () => setIsPlaying(false);
+        window.speechSynthesis.speak(utter);
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  const feedbackPhrases = ["That's it! ✨", "You got it! 👍", "Perfect! 🌟", "Well done! 🎉", "Exactly right! ✅"];
+  const feedbackPhrase = feedbackPhrases[step % feedbackPhrases.length];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <div className="lesson-progress">
+        <div className="step-label">{screen.type === "summary" ? "Summary" : screen.type === "end" ? "Complete!" : `Step ${step + 1} of ${total}`}</div>
+        <div className="progress-bar"><div className="progress-fill" style={{ width: `${((step+1)/total)*100}%` }} /></div>
+      </div>
+
+      <div className="audio-row">
+        <button className={`audio-btn${isPlaying?" playing":""}`} onClick={toggleAudio} aria-label={isPlaying ? "Pause audio" : "Read aloud"}>
+          {isPlaying ? "⏸ Pause" : "🔊 Read Aloud"}
+        </button>
+        {isPlaying && (
+          <div className="speed-row">
+            {["0.75x","1x","1.25x"].map(s => (
+              <button key={s} className={`speed-btn${speed===s?" active":""}`} onClick={() => { setSpeed(s); window.speechSynthesis?.cancel(); setIsPlaying(false); }}>{s}</button>
+            ))}
+          </div>
+        )}
+        <div style={{ flex: 1 }} />
+        <button className="bookmark-btn" onClick={() => onSave(lessonId)} aria-label={isSaved ? "Remove bookmark" : "Save this lesson"} title={isSaved ? "Remove from saved" : "Save for later"}>
+          {isSaved ? "🔖" : "🏷️"}
+        </button>
+      </div>
+
+      {showFeedback && <div className="micro-feedback">{feedbackPhrase}</div>}
+
+      <div style={{ flex: 1, overflowY: "auto" }} ref={contentRef}>
+        <div className="lesson-screen-title">{screen.title}</div>
+
+        {screen.body && <div className="lesson-screen-body" dangerouslySetInnerHTML={{ __html: screen.body }} />}
+
+        {screen.callout && (
+          <div className="step-callout">
+            {screen.callout.split('\n').map((line, i) => <div key={i}>{line}</div>)}
+          </div>
+        )}
+
+        {screen.bullets && (
+          <ul className="bullet-list">
+            {screen.bullets.map((b, i) => (
+              <li key={i}><span className="summary-check">✓</span><span>{b}</span></li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="lesson-nav-row">
+        <button className="btn-back" onClick={goBack} disabled={step === 0} aria-label="Previous step">◀</button>
+        <button className="btn-primary" onClick={goNext} aria-label={isLast ? "Finish lesson" : "Next step"} style={{ flex: 1 }}>
+          {isLast ? "Finish Lesson ✓" : "Next Step →"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CompletionScreen({ lessonId, onHome, savedLessons, onSave }) {
+  const lesson = LESSONS.find(l => l.id === lessonId);
+  const isSaved = savedLessons.includes(lessonId);
+  const appCtx = React.useContext(AppContext);
+  const topic = TOPICS.find(t => t.id === lesson.topic);
+  const related = LESSONS.filter(l => l.topic === lesson.topic && l.id !== lessonId).slice(0,2);
+
+  return (
+    <div>
+      <div className="completion-card">
+        <div className="completion-icon">🎉</div>
+        <div className="completion-title">Great job!</div>
+        <div className="completion-body">You finished <strong>"{lesson.title}"</strong>. That is something to be proud of.</div>
+        <div className="summary-list">
+          {lesson.screens.find(s=>s.type==="summary")?.bullets?.map((b,i) => (
+            <div key={i} className="summary-item"><span className="summary-check">✓</span><span>{b}</span></div>
+          ))}
+        </div>
+        <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+          <button className="btn-secondary" style={{ flex: 1 }} onClick={() => onSave(lessonId)}>
+            {isSaved ? "🔖 Saved" : "🏷️ Save Lesson"}
+          </button>
+        </div>
+      </div>
+
+      {related.length > 0 && (
+        <div style={{ marginTop: 24 }}>
+          <div style={{ fontSize: "var(--subheading)", fontWeight: 700, marginBottom: 14 }}>What to Try Next</div>
+          {related.map(l => (
+            <LessonCard key={l.id} lesson={l} isSaved={savedLessons.includes(l.id)} onStart={() => appCtx.navigate("lesson", { lessonId: l.id })} />
+          ))}
+        </div>
+      )}
+
+      <div style={{ marginTop: 20 }}>
+        <button className="btn-primary" onClick={onHome}>🏠 Go Home</button>
+      </div>
+    </div>
+  );
+}
+
+function HelpOverlay({ screen, onClose }) {
+  const help = HELP_TEXT[screen] || HELP_TEXT.home;
+  return (
+    <div className="overlay-backdrop" onClick={onClose}>
+      <div className="overlay-sheet" onClick={e => e.stopPropagation()}>
+        <div className="overlay-title">❓ {help.title}</div>
+        <div className="overlay-body">{help.body}</div>
+        <button className="btn-primary overlay-close" onClick={onClose}>Got It</button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── APP CONTEXT + MAIN APP ─────────────────────────────────── */
+const AppContext = React.createContext(null);
+
+function App() {
+  const initialPrefs = loadJSON(STORAGE.prefs, { textSize: "AA", contrast: false });
+  const [textSize, setTextSize] = useState(initialPrefs.textSize || "AA");
+  const [contrast, setContrast] = useState(!!initialPrefs.contrast);
+  const [screen, setScreen] = useState("home");
+  const [params, setParams] = useState({});
+  const [savedLessons, setSavedLessons] = useState(() => {
+    const raw = loadJSON(STORAGE.saved, []);
+    return Array.isArray(raw) ? raw.filter(id => LESSONS.some(l => l.id === id)) : [];
+  });
+  const [showHelp, setShowHelp] = useState(false);
+  const [completedLesson, setCompletedLesson] = useState(null);
+  const [inProgress, setInProgress] = useState(() => {
+    const p = loadJSON(STORAGE.progress, null);
+    if (!p || typeof p.lessonId !== "string") return null;
+    if (!LESSONS.some(l => l.id === p.lessonId)) return null;
+    const lesson = LESSONS.find(l => l.id === p.lessonId);
+    const step = clampLessonStep(p.lessonId, p.step);
+    return { lessonId: p.lessonId, step, title: lesson?.title };
+  });
+  const [inProgressDismissed, setInProgressDismissed] = useState(false);
+  const [history, setHistory] = useState([]);
+  const [liveLessonStep, setLiveLessonStep] = useState(0);
+
+  useEffect(() => {
+    saveJSON(STORAGE.prefs, { textSize, contrast });
+  }, [textSize, contrast]);
+
+  useEffect(() => {
+    saveJSON(STORAGE.saved, savedLessons);
+  }, [savedLessons]);
+
+  useEffect(() => {
+    if (inProgress) {
+      saveJSON(STORAGE.progress, { lessonId: inProgress.lessonId, step: inProgress.step });
+    } else {
+      try {
+        localStorage.removeItem(STORAGE.progress);
+      } catch (e) {}
+    }
+  }, [inProgress]);
+
+  const navigate = useCallback((newScreen, newParams = {}) => {
+    setHistory(h => [...h, { screen, params }]);
+    setScreen(newScreen);
+    setParams(newParams);
+    setShowHelp(false);
+  }, [screen, params]);
+
+  const goBack = () => {
+    if (history.length === 0) return;
+    const prev = history[history.length - 1];
+    setHistory(h => h.slice(0, -1));
+    setScreen(prev.screen);
+    setParams(prev.params);
+    setShowHelp(false);
+  };
+
+  const goHome = () => { setScreen("home"); setParams({}); setHistory([]); setShowHelp(false); };
+
+  const toggleSave = (lessonId) => {
+    setSavedLessons(prev => prev.includes(lessonId) ? prev.filter(id => id !== lessonId) : [...prev, lessonId]);
+  };
+
+  const handleComplete = (lessonId) => {
+    setInProgress(null);
+    setInProgressDismissed(false);
+    setCompletedLesson(lessonId);
+    const lesson = LESSONS.find(l => l.id === lessonId);
+    const topic = TOPICS.find(t => t.id === lesson.topic);
+    navigate("completion", { lessonId, topicLabel: topic.label });
+  };
+
+  const handleResume = () => {
+    if (inProgress) {
+      const lesson = LESSONS.find(l => l.id === inProgress.lessonId);
+      const topic = TOPICS.find(t => t.id === lesson.topic);
+      navigate("lesson", { lessonId: inProgress.lessonId, startStep: inProgress.step, topicLabel: topic.label });
+    }
+  };
+
+  const handleDismissResume = () => {
+    setInProgress(null);
+    setInProgressDismissed(true);
+  };
+
+  const handleLessonStepChange = useCallback((lessonId, step) => {
+    const safe = clampLessonStep(lessonId, step);
+    setLiveLessonStep(safe);
+    setInProgress(prev => {
+      const title = LESSONS.find(l => l.id === lessonId)?.title;
+      if (!prev || prev.lessonId !== lessonId) {
+        return { lessonId, step: safe, title };
+      }
+      return { ...prev, step: safe, title: title || prev.title };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (screen === "lesson" && params.lessonId) {
+      const raw = params.startStep;
+      const s = typeof raw === "number" ? raw : 0;
+      setLiveLessonStep(clampLessonStep(params.lessonId, s));
+    }
+  }, [screen, params.lessonId, params.startStep]);
+
+  const currentLesson = params.lessonId ? LESSONS.find(l => l.id === params.lessonId) : null;
+  const currentTopic = params.topicId ? TOPICS.find(t => t.id === params.topicId) : (currentLesson ? TOPICS.find(t => t.id === currentLesson.topic) : null);
+
+  const topicLabel = params.topicLabel || currentTopic?.label || "";
+  const lessonTitle = currentLesson?.title || "";
+
+  const getHelpContext = () => {
+    if (screen === "lesson") return "lesson";
+    if (screen === "completion") return "completion";
+    if (screen === "saved") return "saved";
+    if (screen === "topic") return "topic";
+    return "home";
+  };
+
+  const canGoBack = screen !== "home" && history.length > 0;
+
+  return (
+    <AppContext.Provider value={{ navigate, savedLessons }}>
+      <div className={`app-container text-${textSize} theme-${contrast?"dark":"light"}`}>
+        <TopNav
+          screen={screen}
+          lessonTitle={lessonTitle}
+          topicLabel={topicLabel}
+          step={screen==="lesson" ? liveLessonStep + 1 : null}
+          totalSteps={currentLesson?.screens.length}
+          onBack={goBack}
+          textSize={textSize}
+          setTextSize={setTextSize}
+          contrast={contrast}
+          setContrast={setContrast}
+          onHelp={() => setShowHelp(true)}
+          canGoBack={canGoBack}
+        />
+
+        <div className="content-area">
+          {screen === "home" && (
+            <HomeScreen
+              savedLessons={savedLessons}
+              inProgressLesson={inProgress && !inProgressDismissed && inProgress.step > 0 ? { title: inProgress.title || LESSONS.find(l=>l.id===inProgress.lessonId)?.title } : null}
+              onResume={handleResume}
+              onDismissResume={handleDismissResume}
+            />
+          )}
+          {screen === "topic" && (
+            <TopicScreen topicId={params.topicId} savedLessons={savedLessons} />
+          )}
+          {screen === "lesson" && (
+            <LessonScreen
+              key={params.lessonId + "-" + (params.startStep ?? 0)}
+              lessonId={params.lessonId}
+              startStep={params.startStep ?? 0}
+              savedLessons={savedLessons}
+              onSave={toggleSave}
+              onComplete={handleComplete}
+              onStepChange={handleLessonStepChange}
+            />
+          )}
+          {screen === "completion" && (
+            <CompletionScreen
+              lessonId={params.lessonId}
+              onHome={goHome}
+              savedLessons={savedLessons}
+              onSave={toggleSave}
+            />
+          )}
+          {screen === "saved" && (
+            <SavedScreen savedLessons={savedLessons} />
+          )}
+        </div>
+
+        <BottomNav onHome={goHome} onSaved={() => navigate("saved")} isHome={screen==="home"} />
+
+        {showHelp && <HelpOverlay screen={getHelpContext()} onClose={() => setShowHelp(false)} />}
+      </div>
+    </AppContext.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>
