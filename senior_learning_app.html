@@ -470,9 +470,9 @@ const { useState, useEffect, useRef, useCallback } = React;
 
 /* ─── CONTENT DATA ─────────────────────────────────────────────── */
 const TOPICS = [
-  { id: "tech",    label: "Technology",        icon: "💻", color: "var(--tile-tech)",  desc: "Smartphones, email, video calls, and online safety" },
+  { id: "tech",    label: "Technology",        icon: "💻", color: "var(--tile-tech)",  desc: "Phones, email, video calls, passwords, search, and safe AI basics" },
   { id: "know",    label: "General Knowledge", icon: "🌎", color: "var(--tile-know)",  desc: "History, science, arts, and current events" },
-  { id: "ai",      label: "AI & You",          icon: "🤖", color: "var(--tile-ai)",    desc: "What AI is, how to use it safely, voice assistants" },
+  { id: "ai",      label: "AI & You",          icon: "🤖", color: "var(--tile-ai)",    desc: "What AI is, prompting, voice assistants, and using tools safely" },
 ];
 
 const LESSONS = [
@@ -579,7 +579,7 @@ const LESSONS = [
       },
       {
         title: "Well Done!",
-        body: `<p>You just learned the basics of AI. That puts you ahead of many people.</p><p><strong>Remember:</strong> AI is a tool. You are in charge.</p><p><strong>What to try next:</strong> Take the lesson "Talking to a Voice Assistant" to try AI in a safe, easy way.</p>`,
+        body: `<p>You just learned the basics of AI. That puts you ahead of many people.</p><p><strong>Remember:</strong> AI is a tool. You are in charge.</p><p><strong>What to try next:</strong> Try "Talking to a Voice Assistant" for hands-free help, or "Learning to Prompt" to get better typed answers from AI tools.</p>`,
         type: "end"
       }
     ]
@@ -657,6 +657,63 @@ const LESSONS = [
     ]
   },
   {
+    id: "learning-to-prompt",
+    topic: "ai",
+    icon: "✍️",
+    title: "Learning to Prompt",
+    tileDesc: "Learn how to ask AI tools clear questions — so you get useful, on-target answers.",
+    time: "About 11 minutes",
+    screens: [
+      {
+        title: "The Art of a Good Question",
+        body: `<p>Today you will learn about <strong>prompts</strong>.</p><p>A prompt is simply what you type or say to an AI tool — your question or instruction. Small changes in wording can make a big difference in the answer you get.</p>`,
+        type: "hook"
+      },
+      {
+        title: "Start with What You Want",
+        body: `<p>Before you type, pause for a second and finish this sentence: <em>"I want help with…"</em></p><p>Good prompts name the task clearly. Compare <em>"Tell me about diabetes"</em> with <em>"Explain Type 2 diabetes in simple words, in five short bullet points."</em> The second prompt gives the AI a clear job.</p>`,
+        callout: "Try including:\n• The topic\n• How simple or detailed you want it\n• The format (list, steps, short paragraph)",
+        type: "content"
+      },
+      {
+        title: "Add Helpful Context",
+        body: `<p>AI tools do not know your life unless you tell them — and you should only share what you are comfortable sharing.</p><p>Safe context can help: <em>"I am planning a day trip for someone who uses a walker"</em> or <em>"I need a grocery list for two people for three days."</em></p><p><strong>Never</strong> paste passwords, full account numbers, or your Social Security number into an AI chat.</p>`,
+        type: "content"
+      },
+      {
+        title: "Ask for Plain Language",
+        body: `<p>If an answer feels full of jargon, you can say: <em>"Explain that in everyday language"</em> or <em>"Imagine you are talking to a smart friend who is not a doctor."</em></p><p>You can also ask for a <strong>shorter</strong> answer, a <strong>longer</strong> one, or <strong>step-by-step</strong> instructions.</p>`,
+        type: "content"
+      },
+      {
+        title: "Refine and Try Again",
+        body: `<p>Your first prompt does not have to be perfect. Think of it like conversation.</p><p>You might follow up with: <em>"Can you give me just three options?"</em> or <em>"What would a beginner do first?"</em> If something sounds wrong, say so — <em>"That does not match what my doctor told me — please do not give medical advice."</em></p>`,
+        callout: "You are allowed to correct, narrow down, or start over. There is no penalty for trying again.",
+        type: "content"
+      },
+      {
+        title: "Double-Check What Matters",
+        body: `<p>AI can sound very sure and still be wrong — especially about health, money, laws, or breaking news.</p><p>Use AI for ideas, drafts, and learning. For big decisions, confirm with a trusted expert or official website.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: [
+          "You learned that a prompt is your question or instruction to an AI tool — and clarity helps.",
+          "You learned to add safe context, ask for plain language, and refine your request in follow-ups.",
+          "You learned never to paste passwords or sensitive IDs into AI chats, and to verify important facts elsewhere."
+        ],
+        type: "summary"
+      },
+      {
+        title: "You Are Ready to Practice",
+        body: `<p>You just learned how to prompt AI with more confidence. Pick one small, low-stakes question this week — like a recipe tweak or a short explanation of a hobby — and try two versions of your prompt to see what works best.</p><p><strong>What to try next:</strong> If you have not yet taken "What Is AI?", it pairs nicely with this lesson.</p>`,
+        type: "end"
+      }
+    ]
+  },
+  {
     id: "sending-email",
     topic: "tech",
     icon: "✉️",
@@ -672,6 +729,205 @@ const LESSONS = [
       { title: "Your Message Is On Its Way", body: `<p>After you tap Send, the email goes right away. The other person will see it when they check their email.</p><p>Most people check email at least once a day. You may hear back within a few hours or a day or two.</p>`, type: "content" },
       { title: "You Learned", body: ``, bullets: ["You learned that an email is a free digital message you can send to anyone.", "You learned that every email address has an @ symbol.", "You learned how to write and send an email in a few easy steps."], type: "summary" },
       { title: "You Did It!", body: `<p>You just learned how to send an email. That opens up a whole new way to stay in touch.</p><p><strong>What to try next:</strong> Send a short email to a friend or family member today — even just to say hello.</p>`, type: "end" }
+    ]
+  },
+  {
+    id: "intro-to-ai",
+    topic: "tech",
+    icon: "💡",
+    title: "Introduction to AI",
+    tileDesc: "Meet Artificial Intelligence where it already lives — on your phone, tablet, and computer.",
+    time: "About 10 minutes",
+    screens: [
+      {
+        title: "AI Meets Your Everyday Tech",
+        body: `<p>Today you will get a friendly <strong>introduction to AI</strong> through the devices you already use.</p><p>You do not need to be an engineer. Millions of people use AI features every day without thinking of them as "AI" — they are just helpful tools built into apps and websites.</p>`,
+        type: "hook"
+      },
+      {
+        title: "Where You Might Already See It",
+        body: `<p>On many phones, AI helps <strong>predict the next word</strong> as you type. It may <strong>sort your photos</strong> by faces or scenes. Maps apps use AI to suggest routes around traffic.</p><p>Some customer service websites use <strong>chatbots</strong> — automated helpers that answer common questions before a human steps in.</p>`,
+        callout: "None of these replace your judgment. They are shortcuts — useful when they work, easy to ignore when they do not.",
+        type: "content"
+      },
+      {
+        title: "Trying an AI Chat Tool",
+        body: `<p>You can also open a <strong>chat-style AI tool</strong> in a web browser or app — the kind where you type a question and read an answer.</p><p>Those tools are optional. If you prefer not to use them, you do not have to. If you are curious, start with small questions where a wrong answer would not cause harm — like a recipe idea or how to fold a fitted sheet.</p>`,
+        type: "content"
+      },
+      {
+        title: "Staying Safe and Comfortable",
+        body: `<p>Treat AI like a helpful stranger at a library: good for directions and ideas, not the final word on your health or money.</p><p>Keep personal secrets private. If something sounds too good to be true — instant prizes, urgent payments — it is still a scam, even if AI wrote the message.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Are in Charge",
+        body: `<p>Your phone and computer belong to <em>you</em>. You choose which apps to open, which settings to turn on, and when to put the device down.</p><p>AI is one layer among many. Learning a little at a time — like you are doing now — is exactly the right pace.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: [
+          "You learned that AI shows up in everyday tech: typing help, photos, maps, and chat support.",
+          "You learned that chat-style AI tools are optional and best explored with low-stakes questions first.",
+          "You learned to protect personal information and not trust urgent money requests — AI does not change those rules."
+        ],
+        type: "summary"
+      },
+      {
+        title: "Nice Work!",
+        body: `<p>You just finished a grounded introduction to AI and your devices.</p><p><strong>What to try next:</strong> Open the <strong>AI & You</strong> topic and try "What Is AI?" or "Learning to Prompt" when you are ready to go deeper.</p>`,
+        type: "end"
+      }
+    ]
+  },
+  {
+    id: "passwords-safe",
+    topic: "tech",
+    icon: "🔐",
+    title: "Passwords & Protecting Accounts",
+    tileDesc: "Build stronger passwords, avoid common mistakes, and understand two-step verification in plain language.",
+    time: "About 11 minutes",
+    screens: [
+      {
+        title: "Your Keys to the Digital World",
+        body: `<p>Today you will learn how <strong>passwords</strong> protect your email, bank accounts, shopping sites, and more.</p><p>A password is a secret phrase only you should know. When it is weak or reused, thieves have an easier time breaking in — just like a flimsy lock on a door.</p>`,
+        type: "hook"
+      },
+      {
+        title: "What Makes a Password Stronger",
+        body: `<p>Longer is usually better than tricky. A passphrase of several random words — like <em>Correct-Horse-Battery-Staple</em> style ideas you invent yourself — can be easier to remember and hard for computers to guess.</p><p>Avoid obvious choices: birthdays, pet names, and the word "password" itself. Avoid using the <strong>same</strong> password on every website.</p>`,
+        callout: "If one company has a data breach and your password is reused, crooks may try it everywhere.",
+        type: "content"
+      },
+      {
+        title: "Password Managers (Optional Help)",
+        body: `<p>A <strong>password manager</strong> is an app that remembers long, unique passwords for you. You unlock it with one strong master password or your fingerprint.</p><p>Many phones offer to save passwords securely — that is a form of manager. Whether you use one is your choice; the key idea is: <strong>unique passwords matter.</strong></p>`,
+        type: "content"
+      },
+      {
+        title: "Two-Step Verification Explained Simply",
+        body: `<p><strong>Two-step verification</strong> (also called two-factor authentication) adds a second check after your password — often a short code texted to your phone or generated by an app.</p><p>It is an extra few seconds for you, but a big hurdle for someone who stole only your password. Turn it on for email and banking when the site offers it.</p>`,
+        type: "content"
+      },
+      {
+        title: "If You Forget — and Scam Red Flags",
+        body: `<p>Use each site's official <strong>"Forgot password"</strong> link — never one from an unexpected email or text.</p><p>Real companies will not call out of the blue and ask for your password over the phone. Hang up and contact the company through a number you look up yourself.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: [
+          "You learned that longer, unique passwords — and not reusing one password everywhere — protect you when breaches happen.",
+          "You learned that password managers and phone keychains can help you store strong passwords safely.",
+          "You learned that two-step verification adds an important second lock, and that password reset links should only come from official sites you open yourself."
+        ],
+        type: "summary"
+      },
+      {
+        title: "Great Job Staying Safer",
+        body: `<p>You just strengthened your understanding of passwords and account safety — one of the best returns for your time online.</p><p><strong>What to try next:</strong> Pick one important account (like email) and check whether you can turn on two-step verification today.</p>`,
+        type: "end"
+      }
+    ]
+  },
+  {
+    id: "web-search-tips",
+    topic: "tech",
+    icon: "🔎",
+    title: "Smarter Web Searching",
+    tileDesc: "Get better results from Google, Bing, or other search engines — without needing technical jargon.",
+    time: "About 9 minutes",
+    screens: [
+      {
+        title: "Search Is a Skill You Can Improve",
+        body: `<p>Today you will learn simple habits that make <strong>web search</strong> work better for you.</p><p>A search engine is like a very fast librarian. The clearer your question, the more useful the first few results tend to be.</p>`,
+        type: "hook"
+      },
+      {
+        title: "Use Specific Words",
+        body: `<p>Instead of one vague word, try a short phrase: not just <em>"knee"</em> but <em>"gentle exercises for knee stiffness"</em>.</p><p>If you want local information, add your city or neighborhood: <em>"pharmacy open Sunday Springfield."</em></p>`,
+        type: "content"
+      },
+      {
+        title: "Quotes and Minus Signs",
+        body: `<p>To find an exact phrase, put it inside <strong>quotation marks</strong>: <em>"I have a dream"</em> finds those words together.</p><p>If a word keeps cluttering results, some engines let you put a <strong>minus</strong> in front to exclude it — for example: <em>jaguar -car</em> if you want the animal, not the automobile. (The exact rules vary slightly by site.)</p>`,
+        type: "content"
+      },
+      {
+        title: "Judging What You Find",
+        body: `<p>Official government sites often end in <strong>.gov</strong>. Nonprofit and school sites may use <strong>.org</strong> or <strong>.edu</strong> — still read critically, but they can be good starting points.</p><p>Be careful with sensational headlines and sites that only sell products. When health or money is involved, compare what you read with advice from your doctor, pharmacist, or financial professional.</p>`,
+        callout: "If an answer feels too perfect or frightening, search again with a different source in mind.",
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: [
+          "You learned to use specific phrases and place names to narrow search results.",
+          "You learned that quotation marks can lock words together as an exact phrase.",
+          "You learned to notice site types (.gov, etc.) and to verify important health or money topics with real experts."
+        ],
+        type: "summary"
+      },
+      {
+        title: "Happy Searching!",
+        body: `<p>You just picked up practical search habits you can use every day.</p><p><strong>What to try next:</strong> Look up a hobby, a historical event, or a how-to question — and notice how your results change when you add one extra detail.</p>`,
+        type: "end"
+      }
+    ]
+  },
+  {
+    id: "text-messages",
+    topic: "tech",
+    icon: "💬",
+    title: "Text Messages & Group Chats",
+    tileDesc: "Send texts, read threads, and use group chats — with tips for fewer mistakes and less stress.",
+    time: "About 10 minutes",
+    screens: [
+      {
+        title: "Stay in Touch in Writing",
+        body: `<p>Today you will learn the basics of <strong>text messaging</strong> on a smartphone.</p><p>Texts are short written messages sent over your phone's data or cellular network. They are great for quick updates: "Running late," "Call me when you can," or a photo from a grandchild's game.</p>`,
+        type: "hook"
+      },
+      {
+        title: "Opening Your Messages App",
+        body: `<p>Look for an app called <strong>Messages</strong>, <strong>Message+</strong>, or a speech bubble icon. Tap it to see a list of conversations.</p><p>On many phones, blue bubbles may mean one system (like Apple iMessage) and green another (standard SMS) — the color is just the phone telling you how the message travels. You can still read and reply the same way.</p>`,
+        callout: "Step 1: Open your messages app.\nStep 2: Tap an existing conversation — or tap the pencil icon to start new.",
+        type: "content"
+      },
+      {
+        title: "Starting a New Text",
+        body: `<p>In a new message, type a <strong>contact name</strong> or a <strong>phone number</strong> in the "To" field. Tap the message box at the bottom, type your note, then tap <strong>Send</strong> — often an upward arrow.</p><p>Read once before sending. Autocorrect can change words in funny ways; a quick glance saves confusion.</p>`,
+        type: "content"
+      },
+      {
+        title: "Group Chats",
+        body: `<p>A <strong>group chat</strong> includes several people. Everyone sees each message unless someone leaves the group.</p><p>Group chats can get busy. It is okay to mute notifications for a chat you do not need to follow minute by minute — look in the conversation's settings or "info" menu.</p><p>Remember: anything you write might be screenshotted or forwarded. Keep private topics for a call or in-person talk.</p>`,
+        type: "content"
+      },
+      {
+        title: "Scams Arrive by Text Too",
+        body: `<p>Fake delivery notices, bank alerts, and "you won a prize" texts are common. <strong>Do not tap strange links.</strong> When in doubt, open your bank or store app directly — never from the text.</p>`,
+        type: "content"
+      },
+      {
+        title: "You Learned",
+        body: ``,
+        bullets: [
+          "You learned how to open your messages app, start a conversation, and send a text.",
+          "You learned that group chats include multiple people and can be muted if they get noisy.",
+          "You learned to be cautious with links in unexpected texts — the same scam awareness as email applies here."
+        ],
+        type: "summary"
+      },
+      {
+        title: "Well Done!",
+        body: `<p>You just built confidence with text messaging — a skill that keeps families connected every day.</p><p><strong>What to try next:</strong> Try "How to Make a Video Call" when you want to go from typing to seeing a friendly face.</p>`,
+        type: "end"
+      }
     ]
   },
   {
