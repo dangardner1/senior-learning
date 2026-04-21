@@ -1,0 +1,3 @@
+{
+  "rewrites": [{ "source": "/", "destination": "/senior_learning_app.html" }]
+}
